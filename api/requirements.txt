@@ -1,0 +1,11 @@
+django
+psycopg2-binary
+djangorestframework
+drf-renderer-xlsx
+django-filter
+django-cors-headers
+pylint
+Pillow
+pylint-django
+pyjwt
+django-rest-passwordreset

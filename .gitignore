@@ -1,0 +1,12 @@
+.DS_Store
+*.pyc
+*.pyo
+*.png
+*.jpg
+*.jpge
+*.xml
+.vscode
+api/crm/migrations
+api/.idea
+.vscode
+.idea
