@@ -8,6 +8,7 @@ from api.crm.models import Client
 
 
 class ClientAdmin(admin.ModelAdmin):
-    list_display=('id',)
-    
+    list_display = ('id', 'created', 'modified')
+
+
 admin.site.register(Client, ClientAdmin)

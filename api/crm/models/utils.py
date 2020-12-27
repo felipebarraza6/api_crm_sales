@@ -14,7 +14,7 @@ class ApiModel(models.Model):
     
     modified = models.DateTimeField(
         'modified at',
-        auto_now_add=True,
+        auto_now=True,
         help_text='Date modified'
     )
 

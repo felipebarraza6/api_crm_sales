@@ -42,16 +42,25 @@ class ClientViewSet(viewsets.GenericViewSet,
                 'phone_number': ['contains', 'exact'],
                 'email': ['contains', 'exact'],
                 'is_active': ['exact'],
-                'created': ['contains', 'gte', 'lte', 'year', 'month', 'day', 'year__range', 'month__range', 'day__range', 'date__range']
+                'address_exact': ['contains', 'exact'],
+                'created': [
+                    'contains',
+                    'gte',
+                    'lte',
+                    'year',
+                    'month',
+                    'day',
+                    'year__range',
+                    'month__range',
+                    'day__range',
+                    'date__range'
+                ]
             }
     
     filterset_class = ClientFilter
-         
 
-    def get_serializer_class(self):        
+    def get_serializer_class(self):
         if self.action == 'retrieve':
             return ProfileModelSerializer
         else:
             return ClientModelSerializer
-
-    

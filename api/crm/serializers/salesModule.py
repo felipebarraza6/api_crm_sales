@@ -56,23 +56,39 @@ class ListSalesModuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SalesModule
-        fields = (
-            'id',
-            'created',
-            'user',
-            'initial_amount',
-            'finish_amount',
-            'date_finish',
-            'is_active',
-        )
+        fields = '__all__'
 
 
 class RetrieveModuleSales(serializers.ModelSerializer):
     payments = serializers.SerializerMethodField('get_payments')
     user = UserModelSerializer()
+    cash = serializers.SerializerMethodField('get_cash')
+    debit_card = serializers.SerializerMethodField('get_debit_card')
+    credit_card = serializers.SerializerMethodField('get_credit_card')
+    agreement = serializers.SerializerMethodField('get_agreement')
 
     def get_payments(self, module):
         qs = Payment.objects.filter(sales_module=module)
+        serializer = PaymentData(instance=qs, many=True)
+        return serializer.data
+
+    def get_debit_card(self, module):
+        qs = Payment.objects.filter(sales_module=module, type_payment__is_debit_card=True)
+        serializer = PaymentData(instance=qs, many=True)
+        return serializer.data
+
+    def get_credit_card(self, module):
+        qs = Payment.objects.filter(sales_module=module, type_payment__is_credit_card=True)
+        serializer = PaymentData(instance=qs, many=True)
+        return serializer.data
+
+    def get_agreement(self, module):
+        qs = Payment.objects.filter(sales_module=module, type_payment__is_agreement=True)
+        serializer = PaymentData(instance=qs, many=True)
+        return serializer.data
+
+    def get_cash(self, module):
+        qs = Payment.objects.filter(sales_module=module, type_payment__is_cash=True)
         serializer = PaymentData(instance=qs, many=True)
         return serializer.data
 
@@ -84,9 +100,14 @@ class RetrieveModuleSales(serializers.ModelSerializer):
             'user',
             'initial_amount',
             'finish_amount',
+            'quantity_orders',
             'date_finish',
             'is_active',
-            'payments'
+            'payments',
+            'cash',
+            'debit_card',
+            'credit_card',
+            'agreement',
         )
 
 
@@ -105,6 +126,7 @@ class RetrieveModuleSalesInRetrieveUser(serializers.ModelSerializer):
             'created',
             'date_finish',
             'initial_amount',
+            'quantity_orders',
             'finish_amount',
             'is_active',
             'payments'

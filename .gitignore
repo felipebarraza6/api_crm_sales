@@ -6,7 +6,6 @@
 *.jpge
 *.xml
 .vscode
-api/crm/migrations
 api/.idea
 .vscode
 .idea

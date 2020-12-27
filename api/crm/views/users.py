@@ -45,8 +45,10 @@ class UserViewSet(viewsets.GenericViewSet,
     def get_permissions(self):
         if self.action in ['login']:
             permissions = [AllowAny]
+        if self.action in ['partial_update']:
+            permissions = [IsAccountOwner]
         else:
-            permissions = [IsAuthenticated]
+            permissions = [AllowAny]
         return [p() for p in permissions]
 
     def get_serializer_class(self):        
@@ -128,8 +130,6 @@ class ChangePasswordView(generics.UpdateAPIView):
                 'message': 'La contraseña ha sido actualizada y su token de seguridad fue eliminado debe volver a iniciar sesion',
                 'data': []
             }
-                      
             
             return Response(response)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    

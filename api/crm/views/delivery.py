@@ -1,4 +1,3 @@
-
 # DRF
 from rest_framework import mixins, viewsets, status
 from rest_framework.decorators import action
@@ -10,23 +9,23 @@ from rest_framework.permissions import (
     IsAuthenticated
 )
 
-#Models
+# Models
 from api.crm.models import Delivery
 
-#Filters
+# Filters
 from django_filters import rest_framework as filters
 
-#Serializers
-from api.crm.serializers import DeliveriesModelSerializer
+# Serializers
+from api.crm.serializers import DeliveriesModelSerializer, CreateDeliverySerializer, UpdateDeliverySerializer
+
 
 class DeliveryViewSet(viewsets.GenericViewSet,
-                    mixins.CreateModelMixin,
-                    mixins.RetrieveModelMixin,
-                    mixins.UpdateModelMixin,
-                    mixins.ListModelMixin,
-                    mixins.DestroyModelMixin):
-    
-    queryset = Delivery.objects.all()
+                      mixins.CreateModelMixin,
+                      mixins.UpdateModelMixin,
+                      mixins.ListModelMixin,
+                      mixins.DestroyModelMixin):
+
+    queryset = Delivery.objects.all().order_by('-created')
     filter_backends = (filters.DjangoFilterBackend,)
     lookup_field = 'id'
     permission_classes = [IsAuthenticated]
@@ -39,5 +38,11 @@ class DeliveryViewSet(viewsets.GenericViewSet,
             }
 
     filterset_class = DeliveryFilter
-    serializer_class = DeliveriesModelSerializer
 
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateDeliverySerializer
+        if self.action == 'partial_update':
+            return UpdateDeliverySerializer
+        else:
+            return DeliveriesModelSerializer

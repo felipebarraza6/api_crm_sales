@@ -7,7 +7,7 @@ from rest_framework import serializers
 from api.crm.models import Client, Order
 
 #Serializers
-from .orders import OrderDetailSerializer
+from .orders import OrderDetailSerializer, OrderModelSerializer
 
 
 
@@ -25,12 +25,12 @@ class ProfileModelSerializer(serializers.ModelSerializer):
 
     def get_orders_actives(self, client):
         qs = Order.objects.filter(client = client, is_active=True)
-        serializer = OrderDetailSerializer(instance=qs, many=True)        
+        serializer = OrderModelSerializer(instance=qs, many=True)
         return serializer.data
 
     def get_orders_finish(self, client):
         qs = Order.objects.filter(client = client, is_paid=True)
-        serializer = OrderDetailSerializer(instance=qs, many=True)        
+        serializer = OrderModelSerializer(instance=qs, many=True)
         return serializer.data
 
     class Meta:

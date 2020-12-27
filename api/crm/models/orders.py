@@ -5,16 +5,12 @@ import uuid
 
 # Django
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 
 # Utils
 from .utils import ApiModel
 
 # Models
-from .clients import Client
-from .products import Product, Price
-from .users import User
-from .deliveries import Delivery
+from .products import Price
 
 
 class Order(ApiModel):
@@ -23,7 +19,7 @@ class Order(ApiModel):
 
     # External Origin
     client = models.ForeignKey('Client', related_name='order_client', on_delete=models.CASCADE)
-    user = models.ForeignKey('User', related_name='order_owner', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', related_name='order_owner', on_delete=models.SET_NULL, null=True)
     # Internal Origin
     # Notes
     note_order = models.TextField(max_length=250, blank=True, null=True)
@@ -52,18 +48,30 @@ class OrderItem(ApiModel):
         # Order
         order = Order.objects.filter(uuid=self.order.uuid).first()
         old_value_total_amount = order.total_amount
+        old_value_total_with_taxts = order.total_with_taxts
+
         # Product
         product = Price.objects.filter(id=str(self.product.id)).first()
         value_price = product.price * self.quantity
+
         # Rest Value
         calculate = old_value_total_amount - value_price
+        operation_calculate = calculate
+        if order.is_delivery:
+            if order.delivery.is_tax_porcent:
+                tax_import = order.delivery.tax_porcent
+                operation_calculate = calculate + (calculate * tax_import)
+            elif order.delivery.is_tax_static_value:
+                tax_import = order.delivery.tax_static_value
+                operation_calculate = calculate + tax_import
+
         # Update Order
-        Order.objects.filter(uuid=self.order.uuid).update(total_amount=calculate)
+        Order.objects.filter(uuid=self.order.uuid).update(total_amount=calculate, total_with_taxts= operation_calculate)
         # Deleting Item Order
         super(OrderItem, self).delete(*args, **kwargs)
 
     def __str__(self):
-        return str(('Order:{} Product:{}: Quantiy:{}').format(self.order, self.product, self.quantity))
+        return str('Order:{} Product:{}: Quantiy:{}'.format(self.order, self.product, self.quantity))
 
     class Meta:
         verbose_name_plural = 'Orders_items'
