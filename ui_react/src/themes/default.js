@@ -1,6 +1,6 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 
-import Lato_Black from '../build/typographies/lato/Lato-Black.ttf'
+import Lato_Black from '../assets/typographies/lato/Lato-Black.ttf'
 
 const lato = {
     fontFamily: 'Lato',
@@ -20,6 +20,8 @@ const lato = {
 const theme = createMuiTheme({
     typography: {
       fontFamily: ['Lato', 'sans-serif'],      
+    },
+    palette:{
     },
     overrides: {
       MuiCssBaseline: {
