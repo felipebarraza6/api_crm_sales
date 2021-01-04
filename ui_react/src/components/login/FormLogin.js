@@ -6,19 +6,26 @@ import { useState, useReducer } from 'react'
 import {  Typography, Button, Grid, TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { FormControl, CircularProgress } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 
 // Reducers
 import { login } from '../../reducers/auth'
 
+// Actions
+import { AUTHENTICATION } from '../../actions/auth/authentication'
 
-const FormLogin = () => {
+// Context
+import { Auth } from '../../contexts/auth'
+
+
+const FormLogin = () => {        
 
     const classes = useStyles()
 
+    const { dispatch: dispatchApp } = React.useContext(Auth)
+
     const [state, dispatch] = useReducer(login, {
-        erros: null,
-        user: null,
-        token: null,
+        errors: null,       
         error_email:false,
         error_password:false,
         is_loading: false
@@ -45,7 +52,10 @@ const FormLogin = () => {
 
     function onSubmit (e) {
         e.preventDefault()
-        console.log(valuesForm)                
+        dispatch({
+            type:'LOADING'
+        })        
+        AUTHENTICATION(dispatch, valuesForm, dispatchApp)              
     }
 
 
@@ -81,16 +91,21 @@ const FormLogin = () => {
                         />
                     </FormControl>                          
                 </Grid>                    
-                <Grid item>
-                    {state.errors &&
-                        state.errpr.map((error)=>{
-                            return(
-                                <Typography className={classes.error} children={error} />    
-                            )
+                <Grid item className={classes.gridErrors}>                
+                {state.errors &&                                                
+                        Object.keys(state.errors).map((key, index)=>{
+                            let field = key
+                            let message = state.errors[key]
+                            if(key==='non_field_errors'){
+                                field='Error'
+                            }
+                            return(                                 
+                                 <Alert elevation={6} variant="filled" severity='error' children={`${field}: ${message}`} />
+                                )                            
                         })
-                        
-                    }                       
-                    
+                    } 
+                </Grid>
+                <Grid item>                                                              
                     <Button className={classes.button} variant="contained" color="primary" children='Ingresar' type='submit' />
                     
                 </Grid>  
@@ -120,12 +135,18 @@ const useStyles = makeStyles((theme)=>({
     button: {
         marginTop:'15px',        
     }, 
-    error: {
-        color: theme.palette.warning.dark
+    errors: {
+        color: theme.palette.warning.dark,
+        textTransform: 'lowercase'
+    },
+    gridErrors: {
+        marginTop:'10px',
+        marginBottom: '10px'
     },
     progress: {
         marginTop:'30px',        
     }
+    
 }))
 
 

@@ -99,7 +99,7 @@ class UserViewSet(viewsets.GenericViewSet,
         serializer.is_valid(raise_exception=True)
         user, token = serializer.save()
         data = {
-            'user': UserLoginSerializer(user).data,
+            'user': RetrieveUserModelSerializer(user).data,
             'access_token': token
         }
         return Response(data, status=status.HTTP_201_CREATED)

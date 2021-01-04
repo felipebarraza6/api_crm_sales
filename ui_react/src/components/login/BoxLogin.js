@@ -3,8 +3,9 @@ import React from 'react'
 
 // Maaterial UI
 import { makeStyles } from '@material-ui/styles'
-import { Grid, Paper, Typography } from '@material-ui/core'
-import { AccountCircleOutlined ,InfoTwoTone } from '@material-ui/icons'
+import { Grid, Paper } from '@material-ui/core'
+import { AccountCircleOutlined } from '@material-ui/icons'
+import { Alert } from '@material-ui/lab'
 
 // Components
 import FormLogin from './FormLogin'
@@ -25,15 +26,15 @@ const BoxLogin = () => {
                         <Grid item>
                             <FormLogin />
                         </Grid>  
-                        <Grid item xs={12} >
-                            <Typography 
-                                variant={'subtitle1'}                                 
-                                className={classes.textHelp}
-                            >
-                                <InfoTwoTone className={classes.info}  />
-                                 Ingresa tu usuario y contraseña, en caso de olvidarla comunicate con el administrador
-                                 
-                            </Typography>
+                        <Grid item xs={12} >                            
+                            <Alert 
+                                elevation={18} 
+                                variant="filled" 
+                                severity='warning' 
+                                children={
+                                    'Ingresa tu usuario y contraseña, en caso de olvidarla comunicate con el administrador'
+                                } 
+                            />                                                                                              
                         </Grid>
                                                                                                                       
                     </Grid>                                          

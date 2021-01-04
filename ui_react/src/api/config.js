@@ -15,8 +15,8 @@ const instance = axios.create({
     timeout: 1000
 })
 
-export const POST_LOGIN = async(endpoint) => {
-    const request = instance.get(endpoint).cath((error)=>console.log(error))
+export const POST_LOGIN = async(endpoint, data) => {
+    const request = instance.post(endpoint, data)
     return request
 
 }

@@ -16,7 +16,7 @@ import Login from './containers/Login'
 function App() {
 
   const initialValues = {
-    is_authenticated : false,
+    is_authenticated: false,
     user: null,
     token: null
   }
@@ -46,8 +46,7 @@ function App() {
       <Auth.Provider value={{state, dispatch}}>
         {state.is_authenticated ?
           <Home /> : <Login />
-        }
-        
+        }                
       </Auth.Provider>
     </ThemeProvider>
   )
