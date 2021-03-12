@@ -10,6 +10,7 @@ export const AUTHENTICATION = async(dispatch, data, dispatchApp) => {
                 })
         })
         .catch((error)=>{
+                console.log({error})
                 dispatch({
                     type:'ERRORS',
                     errors: error.response.data

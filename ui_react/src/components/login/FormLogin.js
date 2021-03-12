@@ -33,7 +33,7 @@ const FormLogin = () => {
     const [valuesForm, setValues] = useState({})    
     const [status, setStatus] = useState({
         email_disabled: false,
-        password_disabled: false,                
+        password_disabled: true,                
     })
 
     function onChange (values) { 
